@@ -1,0 +1,28 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 50px auto; font-family: Arial, sans-serif;">
+    <h2 style="text-align:center; margin-bottom: 20px;">{{ quiz.title }}</h2>
+    <p style="text-align:center; color: gray;">⏱ Time: {{ quiz.total_time }} seconds</p>
+
+    <form method="post" action="{% url 'submit_quiz' quiz.id %}">
+        {% csrf_token %}
+        {% for question in questions %}
+            <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4>Q{{ forloop.counter }}. {{ question.text }}</h4>
+                <div style="margin-top: 10px;">
+                    <label><input type="radio" name="q{{ question.id }}" value="1"> {{ question.option1 }}</label><br>
+                    <label><input type="radio" name="q{{ question.id }}" value="2"> {{ question.option2 }}</label><br>
+                    <label><input type="radio" name="q{{ question.id }}" value="3"> {{ question.option3 }}</label><br>
+                    <label><input type="radio" name="q{{ question.id }}" value="4"> {{ question.option4 }}</label><br>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div style="text-align:center;">
+            <button type="submit" style="background-color: #007bff; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                Submit Quiz
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
