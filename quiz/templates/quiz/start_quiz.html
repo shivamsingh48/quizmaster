@@ -1,28 +1,277 @@
 {% extends 'quiz/base.html' %}
-{% block content %}
-<div class="container" style="max-width: 800px; margin: 50px auto; font-family: Arial, sans-serif;">
-    <h2 style="text-align:center; margin-bottom: 20px;">{{ quiz.title }}</h2>
-    <p style="text-align:center; color: gray;">⏱ Time: {{ quiz.total_time }} seconds</p>
+{% block title %}{{ quiz.title }} | QuizMaster{% endblock %}
 
-    <form method="post" action="{% url 'submit_quiz' quiz.id %}">
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Quiz Header -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">{{ quiz.title }}</h1>
+                <p class="text-gray-600 mt-2">{{ quiz.category.name }} • {{ questions.count }} Questions</p>
+            </div>
+            <div class="text-center">
+                <div id="timer" class="text-4xl font-bold text-red-600 mb-2">{{ quiz.total_time }}</div>
+                <p class="text-sm text-gray-600">Time Remaining</p>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mt-4">
+            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                <span>Progress</span>
+                <span id="progress-text">0 / {{ questions.count }}</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Form -->
+    <form id="quiz-form" method="post" action="{% url 'submit_quiz' quiz.id %}">
         {% csrf_token %}
+        
         {% for question in questions %}
-            <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <h4>Q{{ forloop.counter }}. {{ question.text }}</h4>
-                <div style="margin-top: 10px;">
-                    <label><input type="radio" name="q{{ question.id }}" value="1"> {{ question.option1 }}</label><br>
-                    <label><input type="radio" name="q{{ question.id }}" value="2"> {{ question.option2 }}</label><br>
-                    <label><input type="radio" name="q{{ question.id }}" value="3"> {{ question.option3 }}</label><br>
-                    <label><input type="radio" name="q{{ question.id }}" value="4"> {{ question.option4 }}</label><br>
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6 question-card">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 font-semibold">
+                            {{ forloop.counter }}
+                        </span>
+                    </div>
+                    <div class="flex-grow">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ question.text }}</h3>
+                        
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition duration-200 option-label">
+                                <input type="radio" name="{{ question.id }}" value="1" class="mr-3 text-indigo-600 focus:ring-indigo-500 option-input">
+                                <span class="text-gray-700">{{ question.option1 }}</span>
+                            </label>
+                            
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition duration-200 option-label">
+                                <input type="radio" name="{{ question.id }}" value="2" class="mr-3 text-indigo-600 focus:ring-indigo-500 option-input">
+                                <span class="text-gray-700">{{ question.option2 }}</span>
+                            </label>
+                            
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition duration-200 option-label">
+                                <input type="radio" name="{{ question.id }}" value="3" class="mr-3 text-indigo-600 focus:ring-indigo-500 option-input">
+                                <span class="text-gray-700">{{ question.option3 }}</span>
+                            </label>
+                            
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition duration-200 option-label">
+                                <input type="radio" name="{{ question.id }}" value="4" class="mr-3 text-indigo-600 focus:ring-indigo-500 option-input">
+                                <span class="text-gray-700">{{ question.option4 }}</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}
 
-        <div style="text-align:center;">
-            <button type="submit" style="background-color: #007bff; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" id="submit-btn" 
+                    class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                 Submit Quiz
             </button>
         </div>
     </form>
 </div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+<!-- Timer and Progress JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let timeLeft = parseInt('{{ quiz.total_time|default:1800 }}') || 1800;
+    const totalQuestions = parseInt('{{ questions.count|default:0 }}') || 0;
+    let answeredQuestions = 0;
+    let isSubmitting = false; // Flag to track if quiz is being submitted
+    
+    const timerElement = document.getElementById('timer');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const submitBtn = document.getElementById('submit-btn');
+    const quizForm = document.getElementById('quiz-form');
+    
+    // Toast notification function
+    function showToast(message, type = 'info', duration = 5000) {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        
+        // Define toast styles based on type
+        const styles = {
+            info: 'bg-blue-500 border-blue-600',
+            success: 'bg-green-500 border-green-600',
+            warning: 'bg-orange-500 border-orange-600',
+            error: 'bg-red-500 border-red-600'
+        };
+        
+        toast.className = `${styles[type]} text-white px-6 py-4 rounded-lg shadow-lg border-l-4 transform translate-x-full transition-all duration-300 ease-in-out max-w-sm`;
+        toast.innerHTML = `
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        ${type === 'warning' ? '⚠️' : type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️'}
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">${message}</p>
+                    </div>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200 focus:outline-none">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Animate in
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full');
+            toast.classList.add('translate-x-0');
+        }, 100);
+        
+        // Auto remove after duration
+        setTimeout(() => {
+            toast.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 300);
+        }, duration);
+    }
+    
+    // Timer function
+    function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        // Change color based on time remaining
+        if (timeLeft <= 60) {
+            timerElement.className = 'text-4xl font-bold text-red-600 mb-2 animate-pulse';
+        } else if (timeLeft <= 300) {
+            timerElement.className = 'text-4xl font-bold text-orange-600 mb-2';
+        } else {
+            timerElement.className = 'text-4xl font-bold text-green-600 mb-2';
+        }
+        
+        if (timeLeft <= 0) {
+            // Time's up - auto submit
+            isSubmitting = true; // Set flag to prevent beforeunload warning
+            showToast('⏰ Time\'s up! The quiz will be submitted automatically.', 'warning', 3000);
+            setTimeout(() => {
+                quizForm.submit();
+            }, 1000); // Give user time to see the toast
+            return;
+        }
+        
+        timeLeft--;
+    }
+    
+    // Start timer
+    const timerInterval = setInterval(updateTimer, 1000);
+    
+    // Progress tracking
+    function updateProgress() {
+        answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+        const progressPercentage = (answeredQuestions / totalQuestions) * 100;
+        
+        progressBar.style.width = progressPercentage + '%';
+        progressText.textContent = `${answeredQuestions} / ${totalQuestions}`;
+        
+        // Enable submit button when all questions are answered
+        if (answeredQuestions === totalQuestions) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Quiz';
+            // Show success toast when all questions are answered
+            if (answeredQuestions === totalQuestions && !window.allQuestionsToastShown) {
+                showToast('🎉 Great! You\'ve answered all questions. Ready to submit?', 'success', 4000);
+                window.allQuestionsToastShown = true;
+            }
+        } else {
+            submitBtn.disabled = false; // Allow partial submission
+            submitBtn.textContent = `Submit Quiz (${answeredQuestions}/${totalQuestions})`;
+            window.allQuestionsToastShown = false;
+        }
+    }
+    
+    // Add event listeners to radio buttons
+    document.querySelectorAll('.option-input').forEach(input => {
+        input.addEventListener('change', function() {
+            // Highlight selected option
+            const allLabels = this.closest('.question-card').querySelectorAll('.option-label');
+            allLabels.forEach(label => {
+                label.classList.remove('bg-indigo-50', 'border-indigo-300');
+            });
+            
+            this.closest('.option-label').classList.add('bg-indigo-50', 'border-indigo-300');
+            
+            updateProgress();
+        });
+    });
+    
+    // Form submission
+    quizForm.addEventListener('submit', function(e) {
+        clearInterval(timerInterval);
+        
+        if (answeredQuestions < totalQuestions) {
+            const unanswered = totalQuestions - answeredQuestions;
+            e.preventDefault();
+            
+            // Show warning toast with confirmation
+            showToast(`⚠️ You have ${unanswered} unanswered question(s). Click submit again to confirm.`, 'warning', 6000);
+            
+            // Add a flag to allow submission on next click
+            if (!submitBtn.dataset.confirmSubmit) {
+                submitBtn.dataset.confirmSubmit = 'true';
+                submitBtn.textContent = 'Click Again to Confirm Submit';
+                submitBtn.classList.add('bg-orange-600', 'hover:bg-orange-700');
+                submitBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                
+                // Reset after 10 seconds
+                setTimeout(() => {
+                    delete submitBtn.dataset.confirmSubmit;
+                    submitBtn.textContent = `Submit Quiz (${answeredQuestions}/${totalQuestions})`;
+                    submitBtn.classList.remove('bg-orange-600', 'hover:bg-orange-700');
+                    submitBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                }, 10000);
+                
+                return;
+            }
+        }
+        
+        // Show submission toast
+        showToast('📝 Submitting your quiz...', 'info', 3000);
+        
+        // Set flag to prevent beforeunload warning
+        isSubmitting = true;
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+    });
+    
+    // Initialize progress
+    updateProgress();
+    
+    // Welcome toast
+    setTimeout(() => {
+        showToast('🚀 Quiz started! Good luck!', 'info', 3000);
+    }, 500);
+    
+    // Prevent accidental page refresh (but allow legitimate submissions)
+    window.addEventListener('beforeunload', function(e) {
+        if (answeredQuestions > 0 && !isSubmitting) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+});
+</script>
 {% endblock %}
