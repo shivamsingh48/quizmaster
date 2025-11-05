@@ -1,42 +1,382 @@
-{% extends 'quiz/base.html' %}
-{% block title %}Login | QuizMaster{% endblock %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | QuizMaster</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600">
+    <div class="flex h-full">
+        <!-- Left Side - Quiz Cards -->
+        <div class="hidden lg:flex lg:flex-1 flex items-center justify-center p-8 relative overflow-hidden">
+            <!-- Floating Quiz Cards -->
+            <div class="relative">
+                <!-- Row 1 -->
+                <div class="flex justify-center mb-4 space-x-4">
+                    <div class="w-32 h-20 bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg shadow-lg transform rotate-3 hover:rotate-6 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">🧠</span>
+                                Brain Teasers
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-32 h-20 bg-gradient-to-br from-red-400 to-red-500 rounded-lg shadow-lg transform -rotate-2 hover:-rotate-4 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">📜</span>
+                                History
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-{% block content %}
-<div class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Login</h2>
-    
-    {% if messages %}
-        {% for message in messages %}
-            <div class="mb-4 p-4 rounded-md {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
-                {{ message }}
+                <!-- Row 2 -->
+                <div class="flex justify-center mb-4 space-x-4">
+                    <div class="w-32 h-20 bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg shadow-lg transform rotate-1 hover:rotate-3 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">🔬</span>
+                                Science
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-32 h-20 bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg shadow-lg transform -rotate-3 hover:-rotate-6 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">🎵</span>
+                                Music
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-32 h-20 bg-gradient-to-br from-green-400 to-green-500 rounded-lg shadow-lg transform rotate-2 hover:rotate-4 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">⚽</span>
+                                Sports
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="flex justify-center mb-4 space-x-4">
+                    <div class="w-32 h-20 bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-lg shadow-lg transform -rotate-1 hover:-rotate-2 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">💻</span>
+                                Tech
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-32 h-20 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg shadow-lg transform rotate-4 hover:rotate-6 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">🌍</span>
+                                Geography
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="flex justify-center space-x-4">
+                    <div class="w-32 h-20 bg-gradient-to-br from-teal-400 to-teal-500 rounded-lg shadow-lg transform rotate-2 hover:rotate-4 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">📐</span>
+                                Math
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-32 h-20 bg-gradient-to-br from-violet-400 to-violet-500 rounded-lg shadow-lg transform -rotate-2 hover:-rotate-4 transition-transform duration-300">
+                        <div class="p-3 text-white text-xs font-semibold">
+                            <div class="flex items-center mb-1">
+                                <span class="mr-1">🎨</span>
+                                Art
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endfor %}
-    {% endif %}
-    
-    <form method="post" class="space-y-6">
-        {% csrf_token %}
-        <div>
-            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-            <input type="text" name="username" id="username" required 
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+            <!-- Bottom Text -->
+            <div class="absolute bottom-8 left-8 right-8 text-center">
+                <h2 class="text-3xl font-bold text-white mb-2">Quiz anyone, on anything,</h2>
+                <p class="text-xl text-white/90">from anywhere</p>
+            </div>
         </div>
-        
-        <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-            <input type="password" name="password" id="password" required 
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+        <!-- Right Side - Login Form -->
+        <div class="w-full lg:w-1/2 xl:w-2/5 bg-white flex flex-col justify-center p-8 lg:p-12">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='{% url 'home' %}';" title="Go to Home">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-violet-600 rounded-xl mr-3"></div>
+                    <span class="text-3xl font-bold text-gray-800">QuizMaster</span>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="max-w-md mx-auto w-full">
+                <h1 class="text-3xl font-semibold text-gray-800 mb-8">Welcome back</h1>
+                
+                <form method="post" action="{% url 'login' %}" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                            {{ form.non_field_errors.0 }}
+                        </div>
+                    {% endif %}
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <input type="text" name="username" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 bg-white"
+                               placeholder="Enter your username"
+                               value="{% if form.username.value %}{{ form.username.value }}{% endif %}">
+                        {% if form.username.errors %}
+                            <div class="mt-1 text-sm text-red-600">{{ form.username.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" name="password" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 bg-white"
+                               placeholder="Enter your password">
+                        {% if form.password.errors %}
+                            <div class="mt-1 text-sm text-red-600">{{ form.password.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" id="loginBtn" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/20" onclick="console.log('Button clicked directly!');">
+                        <span id="btnText">Continue</span>
+                        <span id="btnSpinner" class="hidden">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Signing in...
+                        </span>
+                    </button>
+                    
+                    <!-- Fallback button (hidden by default, shown if JS fails) -->
+                    <noscript>
+                        <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 shadow-lg">
+                            Continue (No JS)
+                        </button>
+                    </noscript>
+                </form>
+
+                <div class="mt-8 text-center">
+                    <p class="text-gray-600">
+                        Don't have an account? 
+                        <a href="{% url 'signup' %}" class="text-blue-600 hover:text-blue-700 font-semibold transition-colors">Sign up here.</a>
+                    </p>
+                </div>
+            </div>
         </div>
-        
-        <button type="submit" 
-                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200">
-            Login
-        </button>
-    </form>
-    
-    <div class="mt-6 text-center">
-        <p class="text-gray-600">Don't have an account? 
-            <a href="{% url 'signup' %}" class="text-indigo-600 hover:text-indigo-800 font-medium">Sign up</a>
-        </p>
     </div>
-</div>
-{% endblock %}
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <script>
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = {
+                'success': 'bg-green-500',
+                'error': 'bg-red-500',
+                'warning': 'bg-yellow-500',
+                'info': 'bg-blue-500'
+            }[type] || 'bg-blue-500';
+            
+            const icon = {
+                'success': '✅',
+                'error': '❌',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            }[type] || 'ℹ️';
+            
+            toast.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 flex items-center space-x-2 min-w-80`;
+            toast.innerHTML = `
+                <span class="text-lg">${icon}</span>
+                <span class="font-medium">${message}</span>
+                <button onclick="this.parentElement.remove()" class="ml-auto text-white hover:text-gray-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Form handling and validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            
+            console.log('Login form loaded with', inputs.length, 'input fields');
+            console.log('Form element:', form);
+            console.log('Button element:', loginBtn);
+            
+            // Show Django messages as toasts
+            {% if form.non_field_errors %}
+                showToast('{{ form.non_field_errors.0|escapejs }}', 'error');
+            {% endif %}
+            
+            {% if form.username.errors %}
+                showToast('Username: {{ form.username.errors.0|escapejs }}', 'error');
+            {% endif %}
+            
+            {% if form.password.errors %}
+                showToast('Password: {{ form.password.errors.0|escapejs }}', 'error');
+            {% endif %}
+            
+            // Show Django messages as toasts
+            {% if messages %}
+                {% for message in messages %}
+                    showToast('{{ message|escapejs }}', '{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}');
+                {% endfor %}
+            {% endif %}
+            
+            // Add focus effects
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                });
+            });
+            
+            // Handle form submission
+            if (form && loginBtn) {
+                form.addEventListener('submit', function(e) {
+                    console.log('Form submission started');
+                    
+                    // Show loading state
+                    loginBtn.disabled = true;
+                    btnText.classList.add('hidden');
+                    btnSpinner.classList.remove('hidden');
+                    
+                    // Basic validation
+                    const username = document.querySelector('input[name="username"]').value.trim();
+                    const password = document.querySelector('input[name="password"]').value.trim();
+                    
+                    if (!username || !password) {
+                        e.preventDefault();
+                        showToast('Please fill in all fields', 'warning');
+                        
+                        // Reset button state
+                        loginBtn.disabled = false;
+                        btnText.classList.remove('hidden');
+                        btnSpinner.classList.add('hidden');
+                        return false;
+                    }
+                    
+                    console.log('Form validation passed, submitting...');
+                    showToast('Signing you in...', 'info');
+                    
+                    // Submit form via AJAX to handle response
+                    e.preventDefault();
+                    
+                    const formData = new FormData(form);
+                    
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        }
+                    })
+                    .then(response => {
+                        if (response.redirected) {
+                            // Successful login - redirect
+                            showToast('Login successful! Redirecting...', 'success');
+                            setTimeout(() => {
+                                window.location.href = response.url || '{% url "home" %}';
+                            }, 1500);
+                        } else {
+                            return response.text();
+                        }
+                    })
+                    .then(html => {
+                        if (html) {
+                            // Check if there are errors in the response
+                            if (html.includes('non_field_errors') || html.includes('Please enter a correct')) {
+                                showToast('Invalid username or password', 'error');
+                            } else if (html.includes('username.errors') || html.includes('password.errors')) {
+                                showToast('Please check your input fields', 'error');
+                            } else {
+                                showToast('Login failed. Please try again.', 'error');
+                            }
+                        }
+                        
+                        // Reset button state
+                        loginBtn.disabled = false;
+                        btnText.classList.remove('hidden');
+                        btnSpinner.classList.add('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Login error:', error);
+                        showToast('Network error. Please try again.', 'error');
+                        
+                        // Reset button state
+                        loginBtn.disabled = false;
+                        btnText.classList.remove('hidden');
+                        btnSpinner.classList.add('hidden');
+                    });
+                });
+                
+                // Reset button state on page load (in case of errors)
+                loginBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnSpinner.classList.add('hidden');
+            }
+            
+            // Test button click
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    console.log('Button clicked!');
+                });
+            }
+            
+            // Logo click handler (backup to onclick)
+            const logo = document.querySelector('.cursor-pointer');
+            if (logo) {
+                logo.addEventListener('click', function(e) {
+                    console.log('Logo clicked - redirecting to home');
+                    window.location.href = '{% url "home" %}';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

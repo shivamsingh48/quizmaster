@@ -2,68 +2,112 @@
 {% block title %}{{ category.name }} Quizzes | QuizMaster{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto">
-    <!-- Category Header -->
-    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-        <div class="text-center">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">{{ category.name }} Quizzes</h1>
-            <p class="text-gray-600 text-lg">Test your knowledge with our {{ category.name|lower }} quizzes</p>
+<div class="max-w-7xl mx-auto animate-fade-in">
+    <!-- Hero Header -->
+    <div class="glass rounded-3xl shadow-2xl p-8 mb-8 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-blue-500 to-violet-600 rounded-full -translate-x-16 -translate-y-16"></div>
+            <div class="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-violet-500 to-brown-600 rounded-full translate-x-20 translate-y-20"></div>
         </div>
         
-        <div class="mt-6 text-center">
-            <a href="{% url 'home' %}" 
-               class="text-indigo-600 hover:text-indigo-800 font-medium">
-                ← Back to Categories
-            </a>
+        <div class="relative z-10 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-violet-600 rounded-2xl mb-4 animate-bounce-in">
+                <span class="text-2xl">📚</span>
+            </div>
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-3">
+                {{ category.name }} Quizzes
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 text-xl mb-6">
+                Challenge yourself with our expertly crafted {{ category.name|lower }} quizzes
+            </p>
+            
+            <div class="flex justify-center">
+                <a href="{% url 'home' %}" 
+                   class="inline-flex items-center px-6 py-3 bg-white/20 dark:bg-gray-800/20 backdrop-blur-sm border border-white/30 dark:border-gray-600/30 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-white/30 dark:hover:bg-gray-800/30 transition-all duration-200 hover:scale-105">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Categories
+                </a>
+            </div>
         </div>
     </div>
 
     {% if quizzes %}
         <!-- Quiz Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div class="text-3xl font-bold text-indigo-600 mb-2">{{ quizzes.count }}</div>
-                <div class="text-gray-600">Available Quizzes</div>
+            <div class="glass rounded-2xl shadow-xl p-6 text-center hover:scale-105 transition-all duration-300 animate-slide-up" style="animation-delay: 100ms">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <span class="text-white text-xl">📊</span>
+                </div>
+                <div class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">{{ quizzes.count }}</div>
+                <div class="text-gray-600 dark:text-gray-400 font-medium">Available Quizzes</div>
             </div>
             
-            <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div class="text-3xl font-bold text-green-600 mb-2">
+            <div class="glass rounded-2xl shadow-xl p-6 text-center hover:scale-105 transition-all duration-300 animate-slide-up" style="animation-delay: 200ms">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <span class="text-white text-xl">❓</span>
+                </div>
+                <div class="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent mb-2">
                     {% for quiz in quizzes %}{{ quiz.questions.count }}{% if not forloop.last %}+{% endif %}{% endfor %}
                 </div>
-                <div class="text-gray-600">Total Questions</div>
+                <div class="text-gray-600 dark:text-gray-400 font-medium">Total Questions</div>
             </div>
             
-            <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div class="text-3xl font-bold text-purple-600 mb-2">{{ category.name }}</div>
-                <div class="text-gray-600">Category</div>
+            <div class="glass rounded-2xl shadow-xl p-6 text-center hover:scale-105 transition-all duration-300 animate-slide-up" style="animation-delay: 300ms">
+                <div class="w-12 h-12 bg-gradient-to-br from-violet-500 to-violet-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <span class="text-white text-xl">🎯</span>
+                </div>
+                <div class="text-3xl font-bold bg-gradient-to-r from-violet-600 to-violet-700 bg-clip-text text-transparent mb-2">{{ category.name }}</div>
+                <div class="text-gray-600 dark:text-gray-400 font-medium">Category</div>
             </div>
         </div>
         
         <!-- Quiz Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for quiz in quizzes %}
-                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden">
+                <div class="group glass rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden hover:scale-105 animate-slide-up" style="animation-delay: {{ forloop.counter|add:3 }}00ms">
                     <!-- Quiz Header -->
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4">
-                        <h3 class="text-xl font-bold text-white mb-1">{{ quiz.title }}</h3>
-                        <p class="text-indigo-100 text-sm">{{ quiz.category.name }}</p>
+                    <div class="relative bg-gradient-to-br from-blue-500 via-violet-500 to-brown-500 p-6 overflow-hidden">
+                        <!-- Background Pattern -->
+                        <div class="absolute inset-0 opacity-20">
+                            <div class="absolute top-0 right-0 w-20 h-20 bg-white rounded-full -translate-y-10 translate-x-10"></div>
+                            <div class="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-8 -translate-x-8"></div>
+                        </div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-start justify-between mb-3">
+                                <h3 class="text-xl font-bold text-white leading-tight group-hover:scale-105 transition-transform duration-300">{{ quiz.title }}</h3>
+                                <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                                    <span class="text-white text-sm">🧠</span>
+                                </div>
+                            </div>
+                            <p class="text-white/80 text-sm font-medium">{{ quiz.category.name }}</p>
+                        </div>
                     </div>
                     
                     <!-- Quiz Info -->
                     <div class="p-6">
-                        <div class="space-y-3 mb-6">
-                            <div class="flex items-center text-gray-600">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <span class="text-sm">{{ quiz.questions.count }} Question{{ quiz.questions.count|pluralize }}</span>
+                        <div class="space-y-4 mb-6">
+                            <div class="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+                                <div class="flex items-center text-blue-600 dark:text-blue-400">
+                                    <div class="w-8 h-8 bg-blue-100 dark:bg-blue-800/50 rounded-lg flex items-center justify-center mr-3">
+                                        <span class="text-sm">❓</span>
+                                    </div>
+                                    <span class="font-medium">Questions</span>
+                                </div>
+                                <span class="font-bold text-blue-700 dark:text-blue-300">{{ quiz.questions.count }}</span>
                             </div>
                             
-                            <div class="flex items-center text-gray-600">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <span class="text-sm">
+                            <div class="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                                <div class="flex items-center text-green-600 dark:text-green-400">
+                                    <div class="w-8 h-8 bg-green-100 dark:bg-green-800/50 rounded-lg flex items-center justify-center mr-3">
+                                        <span class="text-sm">⏱️</span>
+                                    </div>
+                                    <span class="font-medium">Duration</span>
+                                </div>
+                                <span class="font-bold text-green-700 dark:text-green-300">
                                     {% if quiz.total_time >= 60 %}
                                         {% widthratio quiz.total_time 60 1 %} min
                                     {% else %}
@@ -72,11 +116,18 @@
                                 </span>
                             </div>
                             
-                            <div class="flex items-center text-gray-600">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                </svg>
-                                <span class="text-sm">Difficulty: 
+                            <div class="flex items-center justify-between p-3 bg-violet-50 dark:bg-violet-900/20 rounded-xl">
+                                <div class="flex items-center text-violet-600 dark:text-violet-400">
+                                    <div class="w-8 h-8 bg-violet-100 dark:bg-violet-800/50 rounded-lg flex items-center justify-center mr-3">
+                                        <span class="text-sm">
+                                            {% if quiz.questions.count <= 5 %}🟢
+                                            {% elif quiz.questions.count <= 10 %}🟡
+                                            {% else %}🔴{% endif %}
+                                        </span>
+                                    </div>
+                                    <span class="font-medium">Difficulty</span>
+                                </div>
+                                <span class="font-bold text-violet-700 dark:text-violet-300">
                                     {% if quiz.questions.count <= 5 %}Easy
                                     {% elif quiz.questions.count <= 10 %}Medium
                                     {% else %}Hard{% endif %}
@@ -85,21 +136,37 @@
                         </div>
                         
                         <!-- Action Buttons -->
-                        <div class="space-y-2">
+                        <div class="space-y-3">
                             <a href="{% url 'quiz_detail' quiz.id %}" 
-                               class="block w-full text-center bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200">
-                                View Details
+                               class="group/btn block w-full text-center bg-gradient-to-r from-blue-600 to-violet-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-violet-700 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                                <span class="flex items-center justify-center">
+                                    <svg class="w-5 h-5 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    View Details
+                                </span>
                             </a>
                             
                             {% if user.is_authenticated %}
                                 <a href="{% url 'start_quiz' quiz.id %}" 
-                                   class="block w-full text-center border border-indigo-600 text-indigo-600 py-2 px-4 rounded-lg font-semibold hover:bg-indigo-50 transition duration-200">
-                                    🚀 Quick Start
+                                   class="group/btn block w-full text-center bg-white dark:bg-gray-800 border-2 border-violet-600 dark:border-violet-500 text-violet-600 dark:text-violet-400 py-3 px-4 rounded-xl font-semibold hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all duration-300 transform hover:scale-105">
+                                    <span class="flex items-center justify-center">
+                                        <svg class="w-5 h-5 mr-2 group-hover/btn:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                        </svg>
+                                        🚀 Quick Start
+                                    </span>
                                 </a>
                             {% else %}
                                 <a href="{% url 'login' %}?next={% url 'start_quiz' quiz.id %}" 
-                                   class="block w-full text-center border border-gray-400 text-gray-600 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition duration-200">
-                                    Login to Start
+                                   class="group/btn block w-full text-center bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300">
+                                    <span class="flex items-center justify-center">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                        </svg>
+                                        Login to Start
+                                    </span>
                                 </a>
                             {% endif %}
                         </div>
@@ -110,45 +177,97 @@
         
         <!-- Call to Action -->
         {% if user.is_authenticated %}
-            <div class="mt-12 text-center bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-8 text-white">
-                <h3 class="text-2xl font-bold mb-2">Ready to Challenge Yourself?</h3>
-                <p class="mb-4">Pick a quiz above and test your {{ category.name|lower }} knowledge!</p>
-                <a href="{% url 'dashboard' %}" 
-                   class="bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition duration-200">
-                    View Your Progress
-                </a>
+            <div class="mt-12 glass rounded-3xl p-8 text-center relative overflow-hidden">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-blue-500 to-violet-600 rounded-full -translate-x-16 -translate-y-16"></div>
+                    <div class="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-violet-500 to-brown-600 rounded-full translate-x-20 translate-y-20"></div>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-violet-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">🎯</span>
+                    </div>
+                    <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-3">
+                        Ready to Challenge Yourself?
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg mb-6">
+                        Pick a quiz above and test your {{ category.name|lower }} knowledge!
+                    </p>
+                    <a href="{% url 'dashboard' %}" 
+                       class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-violet-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        View Your Progress
+                    </a>
+                </div>
             </div>
         {% else %}
-            <div class="mt-12 text-center bg-gray-100 rounded-xl p-8">
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Join QuizMaster Today!</h3>
-                <p class="text-gray-600 mb-4">Create an account to track your progress and compete with others</p>
-                <div class="space-x-4">
-                    <a href="{% url 'signup' %}" 
-                       class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200">
-                        Sign Up Free
-                    </a>
-                    <a href="{% url 'login' %}" 
-                       class="border border-indigo-600 text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition duration-200">
-                        Login
-                    </a>
+            <div class="mt-12 glass rounded-3xl p-8 text-center relative overflow-hidden">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-500 to-brown-600 rounded-full -translate-y-16 translate-x-16"></div>
+                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-br from-brown-500 to-blue-600 rounded-full translate-y-20 -translate-x-20"></div>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="w-16 h-16 bg-gradient-to-br from-violet-500 to-brown-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">✨</span>
+                    </div>
+                    <h3 class="text-3xl font-bold bg-gradient-to-r from-violet-600 to-brown-600 dark:from-violet-400 dark:to-brown-400 bg-clip-text text-transparent mb-3">
+                        Join QuizMaster Today!
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg mb-6">
+                        Create an account to track your progress and compete with others
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="{% url 'signup' %}" 
+                           class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-violet-600 to-brown-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-brown-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                            </svg>
+                            Sign Up Free
+                        </a>
+                        <a href="{% url 'login' %}" 
+                           class="inline-flex items-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-violet-600 dark:border-violet-500 text-violet-600 dark:text-violet-400 rounded-xl font-semibold hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all duration-300 transform hover:scale-105">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                            </svg>
+                            Login
+                        </a>
+                    </div>
                 </div>
             </div>
         {% endif %}
         
     {% else %}
         <!-- Empty State -->
-        <div class="text-center py-12">
-            <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
+        <div class="glass rounded-3xl p-12 text-center relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-5">
+                <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full -translate-x-16 -translate-y-16"></div>
+                <div class="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-gray-500 to-gray-700 rounded-full translate-x-20 translate-y-20"></div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">No Quizzes Available</h3>
-            <p class="text-gray-600 mb-6">There are no quizzes in the {{ category.name }} category yet.</p>
-            <a href="{% url 'home' %}" 
-               class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200">
-                Explore Other Categories
-            </a>
+            
+            <div class="relative z-10">
+                <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-2xl flex items-center justify-center shadow-lg">
+                    <svg class="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-3">No Quizzes Available</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-lg mb-8">
+                    There are no quizzes in the {{ category.name }} category yet. Check back soon or explore other categories!
+                </p>
+                <a href="{% url 'home' %}" 
+                   class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Explore Other Categories
+                </a>
+            </div>
         </div>
     {% endif %}
 </div>

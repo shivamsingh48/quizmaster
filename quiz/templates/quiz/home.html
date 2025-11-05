@@ -1,15 +1,218 @@
 {% extends 'quiz/base.html' %}
 {% block title %}Home | QuizMaster{% endblock %}
+
 {% block content %}
-  <h2 class="text-3xl font-semibold text-center mb-8">Choose a Quiz Category</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+<div class="max-w-7xl mx-auto animate-fade-in">
+  <!-- Hero Section -->
+  <div class="text-center mb-12">
+    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-violet-600 rounded-3xl mb-6 animate-bounce-in shadow-2xl">
+      <span class="text-3xl">🎓</span>
+    </div>
+    <h1 class="text-6xl font-bold bg-gradient-to-r from-blue-600 via-violet-600 to-brown-600 dark:from-blue-400 dark:via-violet-400 dark:to-brown-400 bg-clip-text text-transparent mb-4">
+      Welcome to QuizMaster
+    </h1>
+    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+      Challenge yourself with our expertly crafted quizzes across multiple categories. 
+      Test your knowledge, track your progress, and become a quiz master!
+    </p>
+    
+    <!-- Stats Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="glass rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+        <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <span class="text-white text-xl">📚</span>
+        </div>
+        <div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">{{ categories.count }}+</div>
+        <div class="text-gray-600 dark:text-gray-300 font-medium">Categories</div>
+      </div>
+      
+      <div class="glass rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+        <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <span class="text-white text-xl">❓</span>
+        </div>
+        <div class="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-1">1000+</div>
+        <div class="text-gray-600 dark:text-gray-300 font-medium">Questions</div>
+      </div>
+      
+      <div class="glass rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <span class="text-white text-xl">👥</span>
+        </div>
+        <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">500+</div>
+        <div class="text-gray-600 dark:text-gray-300 font-medium">Students</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories Section -->
+  <div class="mb-8">
+    <h2 class="text-4xl font-bold text-center bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent mb-3">
+      Choose Your Challenge
+    </h2>
+    <p class="text-center text-gray-600 dark:text-gray-300 text-lg mb-12">
+      Select a category and start your learning journey
+    </p>
+  </div>
+
+  <!-- Category Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
     {% for category in categories %}
-      <div class="bg-white rounded-xl shadow-md p-6 text-center hover:scale-105 transition transform duration-200">
-        <h3 class="text-xl font-semibold text-indigo-600 mb-3">{{ category.name }}</h3>
-        <a href="{% url 'quiz_list' category.id %}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">View Quizzes</a>
+      <div class="group glass rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:scale-105 animate-slide-up" style="animation-delay: {{ forloop.counter }}00ms">
+        <!-- Category Header with Dynamic Colors -->
+        <div class="relative h-32 overflow-hidden
+          {% cycle 'bg-gradient-to-br from-blue-500 to-blue-600' 'bg-gradient-to-br from-emerald-500 to-emerald-600' 'bg-gradient-to-br from-purple-500 to-purple-600' 'bg-gradient-to-br from-orange-500 to-orange-600' 'bg-gradient-to-br from-pink-500 to-pink-600' 'bg-gradient-to-br from-indigo-500 to-indigo-600' 'bg-gradient-to-br from-red-500 to-red-600' 'bg-gradient-to-br from-yellow-500 to-yellow-600' %}">
+          
+          <!-- Background Pattern -->
+          <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-0 right-0 w-20 h-20 bg-white rounded-full -translate-y-10 translate-x-10"></div>
+            <div class="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-8 -translate-x-8"></div>
+          </div>
+          
+          <!-- Category Icon -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <span class="text-3xl">
+                {% if 'Science' in category.name or 'science' in category.name %}🔬
+                {% elif 'Math' in category.name or 'math' in category.name %}📐
+                {% elif 'History' in category.name or 'history' in category.name %}📜
+                {% elif 'Geography' in category.name or 'geography' in category.name %}🌍
+                {% elif 'Literature' in category.name or 'literature' in category.name %}📖
+                {% elif 'Art' in category.name or 'art' in category.name %}🎨
+                {% elif 'Music' in category.name or 'music' in category.name %}🎵
+                {% elif 'Sports' in category.name or 'sports' in category.name %}⚽
+                {% elif 'Technology' in category.name or 'technology' in category.name or 'Tech' in category.name %}💻
+                {% elif 'Business' in category.name or 'business' in category.name %}💼
+                {% elif 'Health' in category.name or 'health' in category.name %}🏥
+                {% elif 'Food' in category.name or 'food' in category.name %}🍕
+                {% elif 'Movie' in category.name or 'movie' in category.name or 'Film' in category.name %}🎬
+                {% elif 'Game' in category.name or 'game' in category.name %}🎮
+                {% elif 'Nature' in category.name or 'nature' in category.name %}🌿
+                {% elif 'Space' in category.name or 'space' in category.name %}🚀
+                {% elif 'Language' in category.name or 'language' in category.name %}🗣️
+                {% elif 'Politics' in category.name or 'politics' in category.name %}🏛️
+                {% elif 'Economics' in category.name or 'economics' in category.name %}📊
+                {% elif 'Philosophy' in category.name or 'philosophy' in category.name %}🤔
+                {% else %}🧠{% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Category Content -->
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+            {{ category.name }}
+          </h3>
+          
+          <!-- Category Stats -->
+          <div class="space-y-2 mb-6">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Quizzes Available</span>
+              <span class="font-semibold text-gray-800 dark:text-gray-200">{{ category.quiz_set.count|default:"0" }}</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Difficulty</span>
+              <span class="font-semibold 
+                {% cycle 'text-green-600 dark:text-green-400' 'text-yellow-600 dark:text-yellow-400' 'text-red-600 dark:text-red-400' 'text-blue-600 dark:text-blue-400' %}">
+                {% cycle 'Easy' 'Medium' 'Hard' 'Mixed' %}
+              </span>
+            </div>
+          </div>
+          
+          <!-- Action Button -->
+          <a href="{% url 'quiz_list' category.id %}" 
+             class="group/btn block w-full text-center py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105
+             {% cycle 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white' 'bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white' 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white' 'bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white' 'bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-700 hover:to-pink-800 text-white' 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white' %}">
+            <span class="flex items-center justify-center">
+              <svg class="w-5 h-5 mr-2 group-hover/btn:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+              Explore Quizzes
+            </span>
+          </a>
+        </div>
       </div>
     {% empty %}
-      <p class="text-gray-500 text-center col-span-3">No categories available. Add some in admin panel.</p>
+      <!-- Enhanced Empty State -->
+      <div class="col-span-full">
+        <div class="glass rounded-3xl p-12 text-center">
+          <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <span class="text-4xl">📚</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-3">No Categories Available</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-lg mb-8">
+            Categories haven't been set up yet. Contact the administrator to add quiz categories.
+          </p>
+          {% if user.is_staff %}
+            <a href="/admin/" 
+               class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-violet-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              Add Categories
+            </a>
+          {% endif %}
+        </div>
+      </div>
     {% endfor %}
   </div>
+
+  <!-- Call to Action -->
+  {% if not user.is_authenticated %}
+    <div class="mt-16 glass rounded-3xl p-8 text-center relative overflow-hidden">
+      <!-- Background Pattern -->
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-blue-500 to-violet-600 rounded-full -translate-x-16 -translate-y-16"></div>
+        <div class="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-violet-500 to-brown-600 rounded-full translate-x-20 translate-y-20"></div>
+      </div>
+      
+      <div class="relative z-10">
+        <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <span class="text-2xl">🚀</span>
+        </div>
+        <h3 class="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 dark:from-emerald-400 dark:to-blue-400 bg-clip-text text-transparent mb-3">
+          Ready to Start Learning?
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 text-lg mb-6">
+          Join thousands of learners and track your progress across all categories
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="{% url 'signup' %}" 
+             class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-emerald-600 to-blue-600 text-white rounded-xl font-semibold hover:from-emerald-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+            </svg>
+            Get Started Free
+          </a>
+          <a href="{% url 'login' %}" 
+             class="inline-flex items-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-emerald-600 dark:border-emerald-500 text-emerald-600 dark:text-emerald-400 rounded-xl font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 transform hover:scale-105">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+            </svg>
+            Sign In
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  /* Additional animations for staggered loading */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+    opacity: 0;
+  }
+</style>
 {% endblock %}
